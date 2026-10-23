@@ -1,0 +1,31 @@
+# --- OS / IDE ---
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*~
+
+# --- Helm ---
+charts/*/charts/
+*.rendered.yaml
+rendered/
+values-local.yaml
+
+# --- Secrets and local data ---
+.env
+.env.*
+!.env.example
+*.secret.yaml
+*.secret.yml
+secrets/
+argocd/**/repo-creds.yaml
+argocd/**/repo-secret.yaml
+
+# --- Python / Node ---
+__pycache__/
+*.pyc
+node_modules/
+.venv/
+
+tmp/
