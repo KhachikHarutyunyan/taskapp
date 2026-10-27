@@ -1,6 +1,4 @@
 
-replicaCount: 2
-
 image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
   tag: "b14a969796bcea5de0e35211c931c6bcc7552224"
