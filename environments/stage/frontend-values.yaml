@@ -24,6 +24,8 @@ httpRoute:
 
 ingress:
   enabled: true
+  hosts:
+    - host: taskapp.stage.local
 
 # --- NetworkPolicy ---
 
