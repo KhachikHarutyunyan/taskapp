@@ -1,0 +1,25 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: frontend-stage
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: "https://github.com/KhachikHarutyunyan/taskapp.git"
+    targetRevision: HEAD
+    path: charts/frontend
+    helm:
+      valueFiles:
+        - ../../environments/stage/frontend-values.yaml
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: "stage"
+  syncePolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
