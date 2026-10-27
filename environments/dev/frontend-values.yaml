@@ -2,7 +2,7 @@
 replicaCount: 2
 image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
-  tag: "1b558ea29bc3fc087d96b1f93cd33adf3d6533b6"
+  tag: "daf6cead5bc4738612d1b7bf1452ba4018933757"
   pullPolicy: IfNotPresent
 # --- HPA ---
 autoscaling:
