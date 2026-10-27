@@ -13,7 +13,9 @@ httpRoute:
 # --- Ingress ---
 ingress:
   enabled: true
+
 # --- NetworkPolicy ---
+
 networkpolicy:
   enabled: true
   policyTypes:
