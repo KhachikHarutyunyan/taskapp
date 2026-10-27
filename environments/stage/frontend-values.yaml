@@ -26,6 +26,14 @@ ingress:
   enabled: true
   hosts:
     - host: taskapp.stage.local
+      paths:
+        - path: /
+          pathType: Prefix
+          backend:
+            service:
+              name: taskapp-frontend-svc
+              port:
+                number: 8080
 
 # --- NetworkPolicy ---
 
