@@ -3,39 +3,30 @@ image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
   tag: "ccc91bfdd050d22f6d5e93afa37602d603c53b49"
   pullPolicy: IfNotPresent
-
 # --- HPA ---
-
 autoscaling:
   enabled: true
   minReplicas: 2
   maxReplicas: 5
   targetCPUUtilizationPercentage: 70
-
-
 # --- HTTPRoute ---
-
 httpRoute:
   enabled: true
   parentRefs:
-  - name: main-gateway
-    sectionName: http-taskapp
-    namespace: infra-gateway
+    - name: main-gateway
+      sectionName: http-taskapp
+      namespace: infra-gateway
   hostname:
-  - taskapp.local
+    - taskapp.local
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /
-
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /
 # --- Ingress ---
-
 ingress:
   enabled: false
-
 # --- NetworkPolicy ---
-
 networkpolicy:
   enabled: true
   policyTypes:
