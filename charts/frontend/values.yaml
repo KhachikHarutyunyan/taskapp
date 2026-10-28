@@ -11,7 +11,7 @@ image:
 securityContext:
   allowPrivilegeEscalation: false
   capabilities:
-    deny: ["ALL"]
+    drop: ["ALL"]
 
 podSecurityContext:
   runAsNonRoot: true
