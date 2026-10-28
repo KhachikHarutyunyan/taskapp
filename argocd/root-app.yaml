@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: frontend-dev
+  name: root-app
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
@@ -10,16 +10,13 @@ spec:
   source:
     repoURL: "https://github.com/KhachikHarutyunyan/taskapp.git"
     targetRevision: HEAD
-    path: charts/frontend
-    helm:
-      valueFiles:
-        - ../../environments/dev/frontend-values.yaml
+    path: argocd/applications
+    directory:
+      recurse: true
   destination:
     server: "https://kubernetes.default.svc"
-    namespace: 'dev'
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true

@@ -1,0 +1,4 @@
+apiVersion: v2
+name: taskapp-infra
+description: Infrastructure components (ESO secrets, NetworkPolicy)
+version: 0.1.0

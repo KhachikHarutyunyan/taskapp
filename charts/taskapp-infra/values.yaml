@@ -1,0 +1,10 @@
+externalSecrets:
+  enabled: true
+  vault:
+    server: "http://vault.vault.svc.cluster.local:8200"
+    role: "eso-taskapp-role"
+    path: "secret"
+
+postgresql:
+  networkpolicy:
+    enabled: true
