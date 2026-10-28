@@ -4,6 +4,8 @@ kind: NetworkPolicy
 metadata:
   name: postgres-netpol
   namespace: {{ .Release.Namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
 spec:
   podSelector:
     matchLabels:
