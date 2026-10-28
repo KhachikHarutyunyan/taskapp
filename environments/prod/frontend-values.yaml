@@ -13,11 +13,11 @@ autoscaling:
 httpRoute:
   enabled: true
   parentRefs:
-    - name: main-gateway
-      sectionName: http-taskapp
-      namespace: infra-gateway
-  hostname:
-    - taskapp.local
+  - name: main-gateway
+    sectionName: http-taskapp
+    namespace: infra-gateway
+  hostnames:
+  - taskapp.local
   rules:
     - matches:
         - path:
