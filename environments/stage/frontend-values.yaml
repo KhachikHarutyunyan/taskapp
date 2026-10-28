@@ -1,25 +1,18 @@
 
 image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
-  tag: "b14a969796bcea5de0e35211c931c6bcc7552224"
+  tag: "7f02996887db0f91950d2d3e242fdfc6b34e6bfc"
   pullPolicy: IfNotPresent
-
 # --- HPA ---
-
 autoscaling:
   enabled: true
   minReplicas: 1
   maxReplicas: 3
   targetCPUUtilizationPercentage: 20
-
-
 # --- HTTPRoute ---
-
 httpRoute:
   enabled: false
-
 # --- Ingress ---
-
 ingress:
   enabled: true
   hosts:
@@ -32,9 +25,7 @@ ingress:
               name: taskapp-frontend-svc
               port:
                 number: 8080
-
 # --- NetworkPolicy ---
-
 networkpolicy:
   enabled: true
   policyTypes:
