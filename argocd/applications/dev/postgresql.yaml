@@ -7,13 +7,16 @@ metadata:
     argocd.argoproj.io/sync-wave: "0"
 spec:
   project: default
-  source:
-    repoURL: "https://charts.bitnami.com/bitnami"
-    chart: postgresql
-    targetRevision: 18.12.1
-    helm:
-      valueFiles:
-        - ../../environments/dev/postgresql-values.yaml
+  sources:
+    - repoURL: "https://charts.bitnami.com/bitnami"
+      chart: postgresql
+      targetRevision: 18.12.1
+      helm:
+        valueFiles:
+          - $values/environments/dev/postgresql-values.yaml
+    - repoURL: "https://github.com/KhachikHarutyunyan/taskapp.git"
+      targetRevision: HEAD
+      ref: values
   destination:
     server: "https://kubernetes.default.svc"
     namespace: dev
