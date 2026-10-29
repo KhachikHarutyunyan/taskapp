@@ -4,8 +4,8 @@ kind: NetworkPolicy
 metadata:
   name: valkey-netpol
   namespace: {{ .Release.Namespace }}
-  labels:
-    app.kubernetes.io/name: valkey
+  annotations:
+    argocd.argoproj.io/sync-wave: "-5"
 spec:
   podSelector:
     matchLabels:
