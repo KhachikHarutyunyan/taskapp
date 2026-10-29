@@ -5,10 +5,6 @@ image:
   tag: "ccc91bfdd050d22f6d5e93afa37602d603c53b49"
   pullPolicy: IfNotPresent
 
-# securityContext:
-#   allowPrivilegeEscalation: false
-#   capabilities:
-#     deny: ["ALL"]
 
 # --- HPA ---
 autoscaling:
