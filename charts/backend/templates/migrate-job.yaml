@@ -15,5 +15,7 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           command: ["alembic", "upgrade", "head"]
           envFrom:
+            - configMapRef:
+                name: {{ include "backend.fullname" . }}-cfg
             - secretRef:
                 name: {{ .Values.existingSecret }}
