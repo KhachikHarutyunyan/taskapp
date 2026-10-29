@@ -1,6 +1,6 @@
 replicaCount: 2
 image:
-  repository: 192.168.56.10:30500/task-backend
+  repository: ghcr.io/khachikharutyunyan/task-backend
   pullPolicy: IfNotPresent
   tag: "b8a7abd361eb985c811a8b716097ddd91cb5eedb"
 existingSecret: taskapp-backend-secret
