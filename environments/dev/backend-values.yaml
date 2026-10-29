@@ -1,14 +1,10 @@
 replicaCount: 2
-
 image:
   repository: 192.168.56.10:30500/task-backend
   pullPolicy: IfNotPresent
-  tag: "1.0.2"
-
+  tag: "b8a7abd361eb985c811a8b716097ddd91cb5eedb"
 existingSecret: taskapp-backend-secret
-
 # --- CONFIG --- 
-
 config:
   POSTGRES_HOST: "taskapp-postgresql"
   POSTGRES_PORT: "5432"
@@ -19,30 +15,21 @@ config:
   HEALTH_URL: "http://0.0.0.0:8000/ping"
   EXAMPLE_URL: "http://0.0.0.0:8000"
   TESTING: "False"
-
 # --- HPA ---
-
 autoscaling:
   enabled: false
-
-
 # --- SERVICE ACCOUNT ---
-
 serviceAccount:
   create: true
   automount: false
   annotations: {}
   name: "backend-sa"
-
 # --- SERVICE ---
 service:
   type: ClusterIP
   port: 8201
   targetPort: api-port
-
-
 # --- INGRESS Nginx ---
-
 ingress:
   enabled: true
   name: backend-ingress
@@ -62,14 +49,10 @@ ingress:
               name: taskapp-backend
               port:
                 number: 8201
-
 # --- HTTPRoute GatewayAPI ---
-
 httpRoute:
   enabled: false
-
 # --- NetworkPolicy ---
-
 networkpolicy:
   enabled: true
   policyTypes:
