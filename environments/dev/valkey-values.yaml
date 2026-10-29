@@ -14,5 +14,4 @@ dataStorage:
   requestedSize: 1Gi
 
 networkpolicy:
-  enabled: true
-  
+  enabled: false
