@@ -1,0 +1,194 @@
+# Default values for backend.
+
+replicaCount: 1
+
+image:
+  repository: 192.168.56.10:30500/task-backend
+  pullPolicy: IfNotPresent
+  tag: "1.0.2"
+
+existingSecret: taskapp-backend-secret
+
+volumeMounts: []
+volumes: []
+nodeSelector: []
+affinity: []
+tolerations: []
+
+# Security Context
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 10000
+  runAsGroup: 10001
+  fsGroup: 10001
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop: ["ALL"]
+
+# --- Liveness/Readiness Probes and resources ---
+
+livenessProbe:
+  httpGet:
+    port: api-port
+    path: /api/v1/ping
+  periodSeconds: 10
+  initialDelaySeconds: 30
+
+readinessProbe:
+  httpGet:
+    port: api-port
+    path: /api/v1/ping
+  periodSeconds: 5
+  initialDelaySeconds: 10
+  failureThreshold: 6
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 300m
+    memory: 128Mi
+
+# --- CONFIG --- 
+
+config:
+  POSTGRES_HOST: "taskapp-postgresql"
+  POSTGRES_PORT: "5432"
+  REDIS_HOST: "taskapp-valkey"
+  REDIS_PORT: "6379"
+  APP_NAME: "Managment"
+  API_VERSION: "/api/v1"
+  HEALTH_URL: "http://0.0.0.0:8000/ping"
+  EXAMPLE_URL: "http://0.0.0.0:8000"
+  TESTING: "False"
+
+# --- HPA ---
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+
+# --- SERVICE ACCOUNT ---
+
+serviceAccount:
+  create: false
+  automount: false
+  annotations: {}
+  name: "backend-sa"
+
+# --- SERVICE ---
+service:
+  type: ClusterIP
+  port: 8201
+  targetPort: api-port
+
+
+# --- INGRESS Nginx ---
+
+ingress:
+  enabled: false
+  name: backend-ingress
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+  hosts:
+    - host: taskapp.helm.local
+      paths:
+        - path: /api/v1
+          pathType: Prefix
+          backend:
+            service:
+              name: taskapp-backend
+              port:
+                number: 8201
+
+# --- HTTPRoute GatewayAPI ---
+
+httpRoute:
+  enabled: false
+  annotations: {}
+  parentRefs:
+  - name: main-gateway
+    sectionName: http-taskapp
+    namespace: infra-gateway
+  hostname:
+  - taskapp.local
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+      - name: taskapp-backend
+        port: 8201
+
+# --- NetworkPolicy ---
+
+networkpolicy:
+  enabled: false
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+              app.kubernetes.io/instance: taskapp
+      ports:
+        - protocol: TCP
+          port: 8201
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy-gateway-system
+      ports:
+        - protocol: TCP
+          port: 8201
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8201
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: valkey
+      ports:
+        - protocol: TCP
+          port: 6379
