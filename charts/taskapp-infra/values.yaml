@@ -11,4 +11,4 @@ postgresql:
 
 valkey:
   networkpolicy:
-    enabled: true
+    enabled: false
