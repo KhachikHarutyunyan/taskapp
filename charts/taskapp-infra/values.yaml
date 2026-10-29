@@ -8,3 +8,7 @@ externalSecrets:
 postgresql:
   networkpolicy:
     enabled: true
+
+valkey:
+  networkpolicy:
+    enabled: true
