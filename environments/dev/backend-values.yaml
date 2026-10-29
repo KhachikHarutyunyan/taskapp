@@ -6,9 +6,9 @@ image:
 existingSecret: taskapp-backend-secret
 # --- CONFIG --- 
 config:
-  POSTGRES_HOST: "taskapp-postgresql"
+  POSTGRES_HOST: "dev-postgresql"
   POSTGRES_PORT: "5432"
-  REDIS_HOST: "taskapp-valkey"
+  REDIS_HOST: "dev-valkey"
   REDIS_PORT: "6379"
   APP_NAME: "Managment"
   API_VERSION: "/api/v1"
