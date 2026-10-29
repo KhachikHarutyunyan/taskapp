@@ -6,12 +6,10 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     app.kubernetes.io/name: valkey
-    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   podSelector:
     matchLabels:
       app.kubernetes.io/name: valkey
-      app.kubernetes.io/instance: {{ .Release.Name }}
   policyTypes:
     - Ingress
   ingress:
