@@ -1,0 +1,4 @@
+externalSecrets:
+  enabled: true
+  vault:
+    role: "eso-taskapp-role"

@@ -1,0 +1,108 @@
+
+image:
+  repository: ghcr.io/khachikharutyunyan/task-backend
+  pullPolicy: IfNotPresent
+  tag: "0a4f6e421c96c905cabad02f2f118c543cc78022"
+existingSecret: taskapp-backend-secret
+# --- CONFIG --- 
+config:
+  POSTGRES_HOST: "dev-postgresql"
+  POSTGRES_PORT: "5432"
+  REDIS_HOST: "dev-valkey"
+  REDIS_PORT: "6379"
+  APP_NAME: "Managment"
+  API_VERSION: "/api/v1"
+  HEALTH_URL: "http://0.0.0.0:8000/ping"
+  EXAMPLE_URL: "http://0.0.0.0:8000"
+  TESTING: "False"
+# --- HPA ---
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+# --- SERVICE ACCOUNT ---
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: "backend-sa"
+# --- SERVICE ---
+service:
+  type: ClusterIP
+  port: 8201
+  targetPort: api-port
+# --- INGRESS Nginx ---
+ingress:
+  enabled: true
+  name: backend-ingress
+  className: nginx
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+  hosts:
+    - host: taskapp.dev.local
+      paths:
+        - path: /api/v1
+          pathType: Prefix
+          backend:
+            service:
+              name: taskapp-backend
+              port:
+                number: 8201
+# --- HTTPRoute GatewayAPI ---
+httpRoute:
+  enabled: false
+# --- NetworkPolicy ---
+networkpolicy:
+  enabled: true
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+              app.kubernetes.io/instance: taskapp
+      ports:
+        - protocol: TCP
+          port: 8201
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8201
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: valkey
+      ports:
+        - protocol: TCP
+          port: 6379
