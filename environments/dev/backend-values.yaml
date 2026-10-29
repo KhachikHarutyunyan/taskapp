@@ -2,7 +2,7 @@ replicaCount: 2
 image:
   repository: ghcr.io/khachikharutyunyan/task-backend
   pullPolicy: IfNotPresent
-  tag: "b8a7abd361eb985c811a8b716097ddd91cb5eedb"
+  tag: "8ec51f1e5783aaf115c26a751b778febbad402d8"
 existingSecret: taskapp-backend-secret
 # --- CONFIG --- 
 config:
