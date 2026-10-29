@@ -57,7 +57,7 @@ ingress:
     nginx.ingress.kubernetes.io/proxy-send-timeout: "300"
     nginx.ingress.kubernetes.io/proxy-body-size: "100m"
   hosts:
-    - host: taskapp.dev.local
+    - host: taskapp.stage.local
       paths:
         - path: /api/v1
           pathType: Prefix
