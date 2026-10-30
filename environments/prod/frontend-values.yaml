@@ -1,7 +1,7 @@
 
 image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
-  tag: "ccc91bfdd050d22f6d5e93afa37602d603c53b49"
+  tag: "009f64247b6ed902fab4652e072fe103b35d778a"
   pullPolicy: IfNotPresent
 # --- HPA ---
 autoscaling:
@@ -13,11 +13,11 @@ autoscaling:
 httpRoute:
   enabled: true
   parentRefs:
-  - name: main-gateway
-    sectionName: http-taskapp
-    namespace: infra-gateway
+    - name: main-gateway
+      sectionName: http-taskapp
+      namespace: infra-gateway
   hostnames:
-  - taskapp.local
+    - taskapp.local
   rules:
     - matches:
         - path:
