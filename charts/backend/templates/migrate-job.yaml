@@ -32,4 +32,11 @@ spec:
                 name: {{ include "backend.fullname" . }}-cfg
             - secretRef:
                 name: {{ .Values.existingSecret }}
-         
+          
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 80m
+              memory: 128Mi
