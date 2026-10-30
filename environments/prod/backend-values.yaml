@@ -51,7 +51,22 @@ ingress:
   enabled: false
 # --- HTTPRoute GatewayAPI ---
 httpRoute:
-  enabled: false
+  enabled: true
+  annotations: {}
+  parentRefs:
+  - name: main-gateway
+    sectionName: http-taskapp
+    namespace: infra-gateway
+  hostname:
+  - taskapp.local
+  rules:
+  - matches:
+    - path:
+        type: PathPrefix
+        value: /api
+    backendRefs:
+      - name: taskapp-backend
+        port: 8201
 # --- NetworkPolicy ---
 networkpolicy:
   enabled: true
@@ -64,6 +79,9 @@ networkpolicy:
             matchLabels:
               app.kubernetes.io/name: frontend
               app.kubernetes.io/instance: taskapp
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: envoy-gateway-system
       ports:
         - protocol: TCP
           port: 8201

@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: "https://github.com/KhachikHarutyunyan/taskapp.git"
     targetRevision: HEAD
-    path: argocd/applications/prod
+    path: argocd/applications
     directory:
       recurse: true
   destination:
