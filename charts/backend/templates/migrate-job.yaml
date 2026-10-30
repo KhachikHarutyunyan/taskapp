@@ -14,10 +14,18 @@ spec:
         app.kubernetes.io/name: migrator
         app.kubernetes.io/instance: {{ .Release.Name }}
     spec:
+      {{- with .Values.podSecurityContext }}
+        securityContext:
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
       restartPolicy: Never
       containers:
         - name: migrator
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           command: ["alembic", "upgrade", "head"]
           envFrom:
             - configMapRef:
