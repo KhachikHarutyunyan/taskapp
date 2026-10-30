@@ -20,6 +20,7 @@ spec:
         - podSelector:
             matchLabels:
               app.kubernetes.io/name: migrator
+              app.kubernetes.io/instance: {{ .Release.Name }}
       ports:
         - protocol: TCP
           port: 5432
