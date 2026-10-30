@@ -1,0 +1,18 @@
+architecture: replication
+
+auth:
+  enabled: true
+  usersExistingSecret: "taskapp-redis-secret"
+  aclUsers:
+    default:
+      permissions: "~* &* +@ALL"
+      passwordKey: "redis-password"
+
+dataStorage:
+  enabled: true
+  className: "local-path"
+  requestedSize: 1Gi
+
+networkpolicy:
+  enabled: true
+  

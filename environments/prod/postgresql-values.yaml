@@ -1,0 +1,13 @@
+auth:
+  username: testuser
+  database: taskdb
+  existingSecret: taskapp-postgres-secret
+  secretKeys:
+    userPasswordKey: postgres-password
+primary:
+  persistence:
+    enabled: true
+    storageClass: "local-path"
+    size: 3Gi
+networkPolicy:
+  enabled: false

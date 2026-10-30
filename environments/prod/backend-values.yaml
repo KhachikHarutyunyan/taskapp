@@ -1,0 +1,91 @@
+
+image:
+  repository: ghcr.io/khachikharutyunyan/task-backend
+  pullPolicy: IfNotPresent
+  tag: "24c26a7f42768c480876ff3c6237dfb3135179bb"
+existingSecret: taskapp-backend-secret
+# --- CONFIG --- 
+config:
+  POSTGRES_HOST: "stage-postgresql"
+  POSTGRES_PORT: "5432"
+  REDIS_HOST: "stage-valkey"
+  REDIS_PORT: "6379"
+  APP_NAME: "Managment"
+  API_VERSION: "/api/v1"
+  HEALTH_URL: "http://0.0.0.0:8000/ping"
+  EXAMPLE_URL: "http://0.0.0.0:8000"
+  TESTING: "False"
+# --- HPA ---
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 5
+  targetCPUUtilizationPercentage: 75
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 60
+      policies:
+        - type: Percent
+          value: 50
+          periodSeconds: 60
+      selectPolicy: Max
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+        - type: Percent
+          value: 10
+          periodSeconds: 60
+# --- SERVICE ACCOUNT ---
+serviceAccount:
+  create: true
+  automount: false
+  annotations: {}
+  name: "backend-sa"
+# --- SERVICE ---
+service:
+  type: ClusterIP
+  port: 8201
+  targetPort: api-port
+# --- INGRESS Nginx ---
+ingress:
+  enabled: false
+# --- HTTPRoute GatewayAPI ---
+httpRoute:
+  enabled: false
+# --- NetworkPolicy ---
+networkpolicy:
+  enabled: true
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: frontend
+              app.kubernetes.io/instance: taskapp
+      ports:
+        - protocol: TCP
+          port: 8201
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              app.kubernetes.io/name: ingress-nginx
+      ports:
+        - protocol: TCP
+          port: 8201
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: postgresql
+      ports:
+        - protocol: TCP
+          port: 5432
+    - to:
+        - podSelector:
+            matchLabels:
+              app.kubernetes.io/name: valkey
+      ports:
+        - protocol: TCP
+          port: 6379

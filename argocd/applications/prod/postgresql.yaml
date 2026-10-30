@@ -1,0 +1,26 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: prod-postgresql
+  namespace: argocd
+  annotations:
+    argocd.argoproj.io/sync-wave: "0"
+spec:
+  project: default
+  sources:
+    - repoURL: "https://charts.bitnami.com/bitnami"
+      chart: postgresql
+      targetRevision: 18.12.1
+      helm:
+        valueFiles:
+          - $values/environments/prod/postgresql-values.yaml
+    - repoURL: "https://github.com/KhachikHarutyunyan/taskapp.git"
+      targetRevision: HEAD
+      ref: values
+  destination:
+    server: "https://kubernetes.default.svc"
+    namespace: prod
+  syncPolicy:
+    automated: {prune: true, selfHeal: true}
+    syncOptions:
+      - CreateNamespace=true
