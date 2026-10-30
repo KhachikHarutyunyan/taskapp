@@ -54,19 +54,19 @@ httpRoute:
   enabled: true
   annotations: {}
   parentRefs:
-  - name: main-gateway
-    sectionName: http-taskapp
-    namespace: infra-gateway
+    - name: main-gateway
+      sectionName: http-taskapp
+      namespace: infra-gateway
   hostname:
-  - taskapp.local
+    - taskapp.local
   rules:
-  - matches:
-    - path:
-        type: PathPrefix
-        value: /api
-    backendRefs:
-      - name: taskapp-backend
-        port: 8201
+    - matches:
+        - path:
+            type: PathPrefix
+            value: /api
+      backendRefs:
+        - name: taskapp-backend
+          port: 8201
 # --- NetworkPolicy ---
 networkpolicy:
   enabled: true
