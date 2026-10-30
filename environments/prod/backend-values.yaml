@@ -67,13 +67,6 @@ networkpolicy:
       ports:
         - protocol: TCP
           port: 8201
-    - from:
-        - namespaceSelector:
-            matchLabels:
-              app.kubernetes.io/name: ingress-nginx
-      ports:
-        - protocol: TCP
-          port: 8201
   egress:
     - to:
         - podSelector:
