@@ -1,7 +1,7 @@
 
 image:
   repository: ghcr.io/khachikharutyunyan/task-frontend
-  tag: "009f64247b6ed902fab4652e072fe103b35d778a"
+  tag: "bfe438138f058d0fcbf91b2bf487eea7e3dcad44"
   pullPolicy: IfNotPresent
 # --- HPA ---
 autoscaling:
